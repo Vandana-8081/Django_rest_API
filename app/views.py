@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse , HttpResponse
-from .models import Employee 
+from django.http import JsonResponse, HttpResponse
+from .models import Employee
 from django.contrib.auth.models import User
-from .serializer import EmployeeSerializer , UserSerializer
+from .serializer import EmployeeSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-
 
 
 # Create your views here.
@@ -32,3 +31,12 @@ def UserListView(request):
     users = User.objects.all()
     Userdata = UserSerializer(users , many = True)
     return JsonResponse( Userdata.data , safe = False)
+
+
+def employeeDetailView(request , pk):
+     if request.method == 'DELETE':
+          pass
+     elif request.method == 'GET':
+          pass
+     elif request.method == 'PUT':
+          pass
