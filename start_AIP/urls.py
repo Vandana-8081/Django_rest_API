@@ -7,7 +7,6 @@ urlpatterns = [
     path('' , home_page),
     path('admin/', admin.site.urls),
     path('api/employees' , employeeListView),
-    path('api/employees/int:pk' , employeeListView),
+    path('api/employees/<int:pk>' , employeeDetailView),
     path('api/users' , UserListView),
-   
 ]

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .serializer import EmployeeSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 
 
 # Create your views here.
@@ -32,11 +33,27 @@ def UserListView(request):
     Userdata = UserSerializer(users , many = True)
     return JsonResponse( Userdata.data , safe = False)
 
-
+@csrf_exempt
 def employeeDetailView(request , pk):
+     try:
+       employee = Employee.objects.get(pk=pk)
+     except Employee.DoesNotExist:
+          return HttpResponse(status=404)  
+    
+     
      if request.method == 'DELETE':
-          pass
+          employee.delete()
+          return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+     
      elif request.method == 'GET':
-          pass
+          serializer = EmployeeSerializer(employee)
+          return JsonResponse(serializer.data , safe=False)
+     
      elif request.method == 'PUT':
-          pass
+          jsonData = JSONParser().parse(request)
+          serializer = EmployeeSerializer(employee , data = jsonData)
+          if serializer.is_valid():
+               serializer.save()
+               return  JsonResponse(serializer.data, safe = False)
+          else:
+               return JsonResponse(serializer.errors , safe = False)
